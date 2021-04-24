@@ -1,5 +1,6 @@
 import supertest from 'supertest';
-import qa from '../config/qa.js';
+import qa from './qa.js';
+
 const request = supertest(qa.baseUrl);
 
 export default request;
