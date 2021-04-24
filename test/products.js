@@ -58,7 +58,6 @@ describe('Get Products', () => {
 
   describe('Get Products with query string', () => {
     describe('Get Products with page query', () => {
-      let productsData;
       let totalPages;
 
       describe('get mandatory properties when its not the last page', () => {
@@ -110,4 +109,3 @@ describe('Get Products', () => {
     })
   })
 })
-
