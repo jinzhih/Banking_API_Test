@@ -1,0 +1,30 @@
+{
+	"name": "banking-api-tests",
+	"version": "1.0.0",
+	"type": "module",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "mocha --timeout 5000",
+		"test-report": "mocha --timeout 5000 --reporter mochawesome"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@babel/cli": "^7.13.16",
+		"@babel/core": "^7.13.16",
+		"@babel/node": "^7.13.13",
+		"@babel/preset-env": "^7.13.15",
+		"@babel/register": "^7.13.16",
+		"chai": "^4.3.4",
+		"mocha": "^8.3.2",
+		"supertest": "^6.1.3"
+	},
+	"dependencies": {
+		"chai-sorted": "^0.2.0",
+		"dotenv": "^8.2.0",
+		"faker": "^5.5.3",
+		"mochawesome": "^6.2.2"
+	}
+}
