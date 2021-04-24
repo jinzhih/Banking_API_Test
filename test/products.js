@@ -8,7 +8,6 @@ chai.use(chaiSorted);
 
 describe('Get Products', () => {
   let productsData;
-
   describe('Get Products without query string', () => {
     before(async () => {
       productsData = await getProducts();
@@ -35,11 +34,12 @@ describe('Get Products', () => {
     })
 
     it('contains meta property and the type is correct', () => {
+      const { totalRecords, totalPages } = productsData.body.meta;
       expect(productsData.body).to.have.property('meta');
       expect(productsData.body.meta).to.have.property('totalRecords');
-      expect(isNaturalNumber(productsData.body.meta.totalRecords)).to.be.true;
+      expect(isNaturalNumber(totalRecords)).to.be.true;
       expect(productsData.body.meta).to.have.property('totalPages');
-      expect(isNaturalNumber(productsData.body.meta.totalPages)).to.be.true;
+      expect(isNaturalNumber(totalPages)).to.be.true;
     })
 
     it('have standard pagination', () => {
@@ -67,24 +67,24 @@ describe('Get Products', () => {
           totalPages = productsData.body.meta.totalPages;
         })
 
-          it('have standard pagination', () => {
-            const { products } = productsData.body.data;
-            if (totalPages > 1) {
-              return expect(products).to.have.lengthOf(PAGINATION.STANDARD_PAGINATION);
-            }
-          })
+        it('have standard pagination', () => {
+          const { products } = productsData.body.data;
+          if (totalPages > 1) {
+            return expect(products).to.have.lengthOf(PAGINATION.STANDARD_PAGINATION);
+          }
+        })
 
-          it('have last properties inside the links when its not the last page', () => {
-            if (totalPages > 1) {
-              return expect(productsData.body.links).to.have.property('last');
-            }
-          })
+        it('have last properties inside the links when its not the last page', () => {
+          if (totalPages > 1) {
+            return expect(productsData.body.links).to.have.property('last');
+          }
+        })
 
-          it('have next properties inside the links when its not the last page', () => {
-            if (totalPages > 1) {
-              return expect(productsData.body.links).to.have.property('next');
-            }
-          })
+        it('have next properties inside the links when its not the last page', () => {
+          if (totalPages > 1) {
+            return expect(productsData.body.links).to.have.property('next');
+          }
+        })
       })
 
       describe('get mandatory properties when its not the first page', () => {
@@ -94,17 +94,17 @@ describe('Get Products', () => {
           totalPages = productsData.body.meta.totalPages;
         })
 
-          it('have first properties inside the links when its not the first page', () => {
-            if (totalPages > 1) {
-              expect(productsData.body.links).to.have.property('first');
-            }
-          })
+        it('have first properties inside the links when its not the first page', () => {
+          if (totalPages > 1) {
+            expect(productsData.body.links).to.have.property('first');
+          }
+        })
 
-          it('have prev properties inside the links when its not the first page', () => {
-            if (totalPages > 1) {
-              expect(productsData.body.links).to.have.property('prev');
-            }
-          })
+        it('have prev properties inside the links when its not the first page', () => {
+          if (totalPages > 1) {
+            expect(productsData.body.links).to.have.property('prev');
+          }
+        })
       })
     })
   })
