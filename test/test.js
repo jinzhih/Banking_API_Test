@@ -2,7 +2,7 @@ import chai, { expect } from 'chai';
 import { getProductsByEffective } from '../utils/tool.js';
 import { EFFECTIVE } from '../constants/enum.js';
 
-describe.only('getProductsByEffective', () => {
+describe('getProductsByEffective', () => {
   it('return empty array', () => {
     const products = [];
     const res = getProductsByEffective(products, EFFECTIVE.CURRENT);

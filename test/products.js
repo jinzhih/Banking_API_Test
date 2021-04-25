@@ -5,6 +5,7 @@ import { getProducts } from '../helper/product_helper.js';
 import { isObject, isValidURL, isNaturalNumber, isArray } from '../utils/type.js';
 import { PAGINATION } from '../rules/products.js';
 import { EFFECTIVE } from '../constants/enum.js';
+import { getProductsByEffective } from '../utils/tool.js';
 
 chai.use(chaiSorted);
 
@@ -123,29 +124,64 @@ describe('Get Products', () => {
       it('get correct result when query string parameter value is ALL', async () => {
         productsData = await getProducts(`effective=${EFFECTIVE.ALL}`);
         const { totalRecords } = productsData.body.meta;
-        const totalProductsData = await getProducts(`effective=${EFFECTIVE.ALL}&page-size=${totalRecords}`);
-        const { products } = totalProductsData.body.data;
+        if (totalRecords === 0) return;
+        if (totalRecords > 25) {
+          productsData = await getProducts(`effective=${EFFECTIVE.ALL}&page-size=${totalRecords}`);
+        }
+        const { products } = productsData.body.data;
         expect(products.length).to.be.eq(totalRecords);
       })
 
-      /* it('get correct result when query string parameter value is FUTURE', async () => {
+      it('get correct result when query string parameter value is FUTURE', async () => {
         productsData = await getProducts(`effective=${EFFECTIVE.FUTURE}`);
         const { totalRecords } = productsData.body.meta;
-        const totalProductsData = await getProducts(`effective=${EFFECTIVE.FUTURE}&page-size=${totalRecords}`);
-        const { products } = totalProductsData.body.data;
-        let currentProduct = [];
-        if (products.length) {
-          products.forEach(product => {
-            const { effectiveFrom } = product;
-            if (!effectiveFrom) {
-
-            }
-        })
+        if (totalRecords === 0) return;
+        if (totalRecords > 25) {
+          productsData = await getProducts(`effective=${EFFECTIVE.FUTURE}&page-size=${totalRecords}`);
         }
+        const { products } = productsData.body.data;
+        const futureProducts = getProductsByEffective(products, EFFECTIVE.FUTURE);
+        expect(products.length).to.be.eq(futureProducts.length);
+      })
+      // TODO Confirm the effective filter with bank
+      /*       it('get correct result when query string parameter value is CURRENT', async () => {
+              productsData = await getProducts(`effective=${EFFECTIVE.CURRENT}`);
+              const { totalRecords } = productsData.body.meta;
+              if (totalRecords === 0) return;
+              const totalProductsData = await getProducts(`effective=${EFFECTIVE.CURRENT}&page-size=${totalRecords}`);
+              const { products } = totalProductsData.body.data;
+              const currentProducts = getProductsByEffective(products, EFFECTIVE.CURRENT);
+              expect(products.length).to.be.eq(currentProducts.length);
+            }) */
+    })
 
-        expect(currentProduct.length).to.be.eq(0);
+    describe('Get Products with updated-since query', () => {
+      it('validate query string parameter value', async () => {
+        const randomValue = faker.lorem.word();
+        const randomDate = new Date(randomValue);
+        if (randomDate.toString() === 'Invalid Date') {
+          productsData = await getProducts(`updated-since=${randomValue}`);
+          expect(productsData.status).to.be.eq(400);
+          expect(productsData.body.errors[0].title).to.be.eq('Invalid query string parameter value');
+        }
+      })
 
-      }) */
+      it('get correct result when query string parameter value is valid', async () => {
+        const randomDate = faker.date.past(1).toISOString();
+        productsData = await getProducts(`updated-since=${randomDate}`);
+        const { totalRecords } = productsData.body.meta;
+        if (totalRecords === 0) return;
+        if (totalRecords > 25) {
+          productsData = await getProducts(`updated-since=${randomDate}&page-size=${totalRecords}`);
+        }
+        const { products } = productsData.body.data;
+        const invalidProducts = products.filter(product => {
+          const queryTime = new Date(randomDate).getTime();
+          const lastUpdatedTime = new Date(product.lastUpdated).getTime();
+          return queryTime - lastUpdatedTime > 0;
+        });
+        expect(invalidProducts.length).to.be.eq(0);
+      })
     })
   })
 })
