@@ -5,6 +5,5 @@ export const getProducts = async (string) => {
   const res = await request
     .get(url)
     .set('x-v', 3);
-
   return res;
 }

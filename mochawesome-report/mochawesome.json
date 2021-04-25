@@ -5,9 +5,9 @@
     "passes": 12,
     "pending": 0,
     "failures": 0,
-    "start": "2021-04-24T11:00:42.993Z",
-    "end": "2021-04-24T11:00:44.234Z",
-    "duration": 1241,
+    "start": "2021-04-25T03:12:59.621Z",
+    "end": "2021-04-25T03:13:01.282Z",
+    "duration": 1661,
     "testsRegistered": 12,
     "passPercent": 100,
     "pendingPercent": 0,
@@ -18,7 +18,7 @@
   },
   "results": [
     {
-      "uuid": "5a792bb1-c784-4546-b295-a48cfc02a746",
+      "uuid": "82055b89-b419-4023-9686-237e0a98dd0f",
       "title": "",
       "fullFile": "",
       "file": "",
@@ -27,7 +27,7 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "1251e9bb-534d-46ce-b429-b29f423d5a39",
+          "uuid": "5c6a4ee5-83e0-47d0-aed2-f810e0392c40",
           "title": "Get Products",
           "fullFile": "C:\\Users\\Administrator\\OneDrive\\桌面\\API Testing\\banking-api-tests\\test\\products.js",
           "file": "\\test\\products.js",
@@ -36,7 +36,7 @@
           "tests": [],
           "suites": [
             {
-              "uuid": "28c24da5-f0e1-45ae-b03a-441ba31261b4",
+              "uuid": "0289f332-850b-4cc9-9984-fb196e96f9c9",
               "title": "Get Products without query string",
               "fullFile": "C:\\Users\\Administrator\\OneDrive\\桌面\\API Testing\\banking-api-tests\\test\\products.js",
               "file": "\\test\\products.js",
@@ -45,7 +45,7 @@
                   "title": "\"before all\" hook in \"Get Products without query string\"",
                   "fullTitle": "Get Products Get Products without query string \"before all\" hook in \"Get Products without query string\"",
                   "timedOut": false,
-                  "duration": 612,
+                  "duration": 583,
                   "state": null,
                   "speed": null,
                   "pass": false,
@@ -54,8 +54,8 @@
                   "context": null,
                   "code": "productsData = await getProducts();",
                   "err": {},
-                  "uuid": "8bdea017-e075-49aa-af76-68452d68cef4",
-                  "parentUUID": "28c24da5-f0e1-45ae-b03a-441ba31261b4",
+                  "uuid": "606beb1e-5784-4e05-8989-13f4f6daaf70",
+                  "parentUUID": "0289f332-850b-4cc9-9984-fb196e96f9c9",
                   "isHook": true,
                   "skipped": false
                 }
@@ -66,7 +66,7 @@
                   "title": "get correct format of response",
                   "fullTitle": "Get Products Get Products without query string get correct format of response",
                   "timedOut": false,
-                  "duration": 0,
+                  "duration": 1,
                   "state": "passed",
                   "speed": "fast",
                   "pass": true,
@@ -75,8 +75,8 @@
                   "context": null,
                   "code": "expect(productsData.status).to.be.eq(200);",
                   "err": {},
-                  "uuid": "b23313b1-185a-4fa1-bb7d-46ecd9508c21",
-                  "parentUUID": "28c24da5-f0e1-45ae-b03a-441ba31261b4",
+                  "uuid": "2dc41258-ac69-443a-ae9f-1cee3c245638",
+                  "parentUUID": "0289f332-850b-4cc9-9984-fb196e96f9c9",
                   "isHook": false,
                   "skipped": false
                 },
@@ -93,8 +93,8 @@
                   "context": null,
                   "code": "expect(productsData.body).to.have.property('data');\nexpect(isObject(productsData.body.data)).to.be.true;",
                   "err": {},
-                  "uuid": "ae2b630e-cb32-4452-9eba-eecbb4b45020",
-                  "parentUUID": "28c24da5-f0e1-45ae-b03a-441ba31261b4",
+                  "uuid": "7be5e9a4-237a-4efb-ae5f-07c2c73e3904",
+                  "parentUUID": "0289f332-850b-4cc9-9984-fb196e96f9c9",
                   "isHook": false,
                   "skipped": false
                 },
@@ -111,8 +111,8 @@
                   "context": null,
                   "code": "expect(productsData.body.data).to.have.property('products');\nexpect(isArray(productsData.body.data.products)).to.be.true;",
                   "err": {},
-                  "uuid": "e9161b8c-704b-4fcd-b4d0-085efa4a8884",
-                  "parentUUID": "28c24da5-f0e1-45ae-b03a-441ba31261b4",
+                  "uuid": "1e139f83-4afa-4779-bc57-542e6ee040da",
+                  "parentUUID": "0289f332-850b-4cc9-9984-fb196e96f9c9",
                   "isHook": false,
                   "skipped": false
                 },
@@ -120,7 +120,7 @@
                   "title": "contains links property and the type is correct",
                   "fullTitle": "Get Products Get Products without query string contains links property and the type is correct",
                   "timedOut": false,
-                  "duration": 1,
+                  "duration": 0,
                   "state": "passed",
                   "speed": "fast",
                   "pass": true,
@@ -129,8 +129,8 @@
                   "context": null,
                   "code": "expect(productsData.body).to.have.property('links');\nexpect(productsData.body.links).to.have.property('self');\nexpect(isValidURL(productsData.body.links.self)).to.be.true;",
                   "err": {},
-                  "uuid": "a3ed1441-779a-4117-ab9c-14878773bd9a",
-                  "parentUUID": "28c24da5-f0e1-45ae-b03a-441ba31261b4",
+                  "uuid": "7ff4d6eb-0d95-4ce7-8ddb-d78b8a9ad6a8",
+                  "parentUUID": "0289f332-850b-4cc9-9984-fb196e96f9c9",
                   "isHook": false,
                   "skipped": false
                 },
@@ -145,10 +145,10 @@
                   "fail": false,
                   "pending": false,
                   "context": null,
-                  "code": "expect(productsData.body).to.have.property('meta');\nexpect(productsData.body.meta).to.have.property('totalRecords');\nexpect(isNaturalNumber(productsData.body.meta.totalRecords)).to.be.true;\nexpect(productsData.body.meta).to.have.property('totalPages');\nexpect(isNaturalNumber(productsData.body.meta.totalPages)).to.be.true;",
+                  "code": "const { totalRecords, totalPages } = productsData.body.meta;\nexpect(productsData.body).to.have.property('meta');\nexpect(productsData.body.meta).to.have.property('totalRecords');\nexpect(isNaturalNumber(totalRecords)).to.be.true;\nexpect(productsData.body.meta).to.have.property('totalPages');\nexpect(isNaturalNumber(totalPages)).to.be.true;",
                   "err": {},
-                  "uuid": "7816ca67-c3d3-4f3e-9e4e-ff193025f0f0",
-                  "parentUUID": "28c24da5-f0e1-45ae-b03a-441ba31261b4",
+                  "uuid": "6b2dabcb-9ee4-4fba-9c24-480dc80fe2e6",
+                  "parentUUID": "0289f332-850b-4cc9-9984-fb196e96f9c9",
                   "isHook": false,
                   "skipped": false
                 },
@@ -165,8 +165,8 @@
                   "context": null,
                   "code": "let { totalPages } = productsData.body.meta;\nconst { products } = productsData.body.data;\nif (totalPages > 1) {\n  expect(products).to.have.lengthOf(PAGINATION.STANDARD_PAGINATION);\n}",
                   "err": {},
-                  "uuid": "eecdedd7-8009-41c6-bc86-dd0bea95af5a",
-                  "parentUUID": "28c24da5-f0e1-45ae-b03a-441ba31261b4",
+                  "uuid": "f4f8ecb7-b8b5-422f-8143-f2c2df63d87e",
+                  "parentUUID": "0289f332-850b-4cc9-9984-fb196e96f9c9",
                   "isHook": false,
                   "skipped": false
                 },
@@ -183,21 +183,21 @@
                   "context": null,
                   "code": "const { products } = productsData.body.data;\nexpect(products).to.be.descendingBy('lastUpdated');",
                   "err": {},
-                  "uuid": "5f9b97b5-36e3-40d0-9467-618c403d4b61",
-                  "parentUUID": "28c24da5-f0e1-45ae-b03a-441ba31261b4",
+                  "uuid": "c3a708f0-e727-43e3-b36c-3857e31e074d",
+                  "parentUUID": "0289f332-850b-4cc9-9984-fb196e96f9c9",
                   "isHook": false,
                   "skipped": false
                 }
               ],
               "suites": [],
               "passes": [
-                "b23313b1-185a-4fa1-bb7d-46ecd9508c21",
-                "ae2b630e-cb32-4452-9eba-eecbb4b45020",
-                "e9161b8c-704b-4fcd-b4d0-085efa4a8884",
-                "a3ed1441-779a-4117-ab9c-14878773bd9a",
-                "7816ca67-c3d3-4f3e-9e4e-ff193025f0f0",
-                "eecdedd7-8009-41c6-bc86-dd0bea95af5a",
-                "5f9b97b5-36e3-40d0-9467-618c403d4b61"
+                "2dc41258-ac69-443a-ae9f-1cee3c245638",
+                "7be5e9a4-237a-4efb-ae5f-07c2c73e3904",
+                "1e139f83-4afa-4779-bc57-542e6ee040da",
+                "7ff4d6eb-0d95-4ce7-8ddb-d78b8a9ad6a8",
+                "6b2dabcb-9ee4-4fba-9c24-480dc80fe2e6",
+                "f4f8ecb7-b8b5-422f-8143-f2c2df63d87e",
+                "c3a708f0-e727-43e3-b36c-3857e31e074d"
               ],
               "failures": [],
               "pending": [],
@@ -208,7 +208,7 @@
               "_timeout": 5000
             },
             {
-              "uuid": "a06e368f-d6dc-4e35-8e2e-e07b9c7b495e",
+              "uuid": "c80941c4-ec9f-40a1-997d-989cff0b2e15",
               "title": "Get Products with query string",
               "fullFile": "C:\\Users\\Administrator\\OneDrive\\桌面\\API Testing\\banking-api-tests\\test\\products.js",
               "file": "\\test\\products.js",
@@ -217,7 +217,7 @@
               "tests": [],
               "suites": [
                 {
-                  "uuid": "f5f65ca4-6f22-494e-8a82-0951411f7a89",
+                  "uuid": "ca226e1f-e3c8-484a-b8c6-6f0decaef492",
                   "title": "Get Products with page query",
                   "fullFile": "C:\\Users\\Administrator\\OneDrive\\桌面\\API Testing\\banking-api-tests\\test\\products.js",
                   "file": "\\test\\products.js",
@@ -226,7 +226,7 @@
                   "tests": [],
                   "suites": [
                     {
-                      "uuid": "900d2068-e189-42f6-86ac-434282701dc3",
+                      "uuid": "fa34a364-f4a8-4b3f-b6b8-8ba554f418e3",
                       "title": "get mandatory properties when its not the last page",
                       "fullFile": "C:\\Users\\Administrator\\OneDrive\\桌面\\API Testing\\banking-api-tests\\test\\products.js",
                       "file": "\\test\\products.js",
@@ -235,7 +235,7 @@
                           "title": "\"before all\" hook in \"get mandatory properties when its not the last page\"",
                           "fullTitle": "Get Products Get Products with query string Get Products with page query get mandatory properties when its not the last page \"before all\" hook in \"get mandatory properties when its not the last page\"",
                           "timedOut": false,
-                          "duration": 316,
+                          "duration": 904,
                           "state": null,
                           "speed": null,
                           "pass": false,
@@ -244,8 +244,8 @@
                           "context": null,
                           "code": "// TODO May be need to generate a random page number (Faker.js)\nproductsData = await getProducts('page=1');\ntotalPages = productsData.body.meta.totalPages;",
                           "err": {},
-                          "uuid": "4e69c121-be9b-4acf-a387-c7a062d6a493",
-                          "parentUUID": "900d2068-e189-42f6-86ac-434282701dc3",
+                          "uuid": "2e4e36f6-503d-4274-8d62-c38707ecda31",
+                          "parentUUID": "fa34a364-f4a8-4b3f-b6b8-8ba554f418e3",
                           "isHook": true,
                           "skipped": false
                         }
@@ -265,8 +265,8 @@
                           "context": null,
                           "code": "const { products } = productsData.body.data;\nif (totalPages > 1) {\n  return expect(products).to.have.lengthOf(PAGINATION.STANDARD_PAGINATION);\n}",
                           "err": {},
-                          "uuid": "0e72c040-4cc7-4799-b372-f4c288b29139",
-                          "parentUUID": "900d2068-e189-42f6-86ac-434282701dc3",
+                          "uuid": "fe832ab3-73a4-4b57-9c47-2e59ec3fe325",
+                          "parentUUID": "fa34a364-f4a8-4b3f-b6b8-8ba554f418e3",
                           "isHook": false,
                           "skipped": false
                         },
@@ -274,7 +274,7 @@
                           "title": "have last properties inside the links when its not the last page",
                           "fullTitle": "Get Products Get Products with query string Get Products with page query get mandatory properties when its not the last page have last properties inside the links when its not the last page",
                           "timedOut": false,
-                          "duration": 1,
+                          "duration": 0,
                           "state": "passed",
                           "speed": "fast",
                           "pass": true,
@@ -283,8 +283,8 @@
                           "context": null,
                           "code": "if (totalPages > 1) {\n  return expect(productsData.body.links).to.have.property('last');\n}",
                           "err": {},
-                          "uuid": "3a162862-3188-45bd-a97d-011eab9792a5",
-                          "parentUUID": "900d2068-e189-42f6-86ac-434282701dc3",
+                          "uuid": "43f11c0f-cd33-4257-86b7-2de76e6752a3",
+                          "parentUUID": "fa34a364-f4a8-4b3f-b6b8-8ba554f418e3",
                           "isHook": false,
                           "skipped": false
                         },
@@ -301,28 +301,28 @@
                           "context": null,
                           "code": "if (totalPages > 1) {\n  return expect(productsData.body.links).to.have.property('next');\n}",
                           "err": {},
-                          "uuid": "26825bf1-15dc-483e-b926-b8af84112127",
-                          "parentUUID": "900d2068-e189-42f6-86ac-434282701dc3",
+                          "uuid": "a737109d-80a2-49b8-a2ee-af27e7811d22",
+                          "parentUUID": "fa34a364-f4a8-4b3f-b6b8-8ba554f418e3",
                           "isHook": false,
                           "skipped": false
                         }
                       ],
                       "suites": [],
                       "passes": [
-                        "0e72c040-4cc7-4799-b372-f4c288b29139",
-                        "3a162862-3188-45bd-a97d-011eab9792a5",
-                        "26825bf1-15dc-483e-b926-b8af84112127"
+                        "fe832ab3-73a4-4b57-9c47-2e59ec3fe325",
+                        "43f11c0f-cd33-4257-86b7-2de76e6752a3",
+                        "a737109d-80a2-49b8-a2ee-af27e7811d22"
                       ],
                       "failures": [],
                       "pending": [],
                       "skipped": [],
-                      "duration": 1,
+                      "duration": 0,
                       "root": false,
                       "rootEmpty": false,
                       "_timeout": 5000
                     },
                     {
-                      "uuid": "8f123a32-1c43-40be-b427-4d751e67e858",
+                      "uuid": "f30fa77c-a487-4d68-8154-7ca4f4c6791e",
                       "title": "get mandatory properties when its not the first page",
                       "fullFile": "C:\\Users\\Administrator\\OneDrive\\桌面\\API Testing\\banking-api-tests\\test\\products.js",
                       "file": "\\test\\products.js",
@@ -331,7 +331,7 @@
                           "title": "\"before all\" hook in \"get mandatory properties when its not the first page\"",
                           "fullTitle": "Get Products Get Products with query string Get Products with page query get mandatory properties when its not the first page \"before all\" hook in \"get mandatory properties when its not the first page\"",
                           "timedOut": false,
-                          "duration": 289,
+                          "duration": 154,
                           "state": null,
                           "speed": null,
                           "pass": false,
@@ -340,8 +340,8 @@
                           "context": null,
                           "code": "// TODO May be need to generate a random page number (Faker.js)\nproductsData = await getProducts('page=2');\ntotalPages = productsData.body.meta.totalPages;",
                           "err": {},
-                          "uuid": "3500d2da-34bc-4afe-a3bb-1d29756bbefa",
-                          "parentUUID": "8f123a32-1c43-40be-b427-4d751e67e858",
+                          "uuid": "42dfc498-e416-41a3-b194-0560c5846e61",
+                          "parentUUID": "f30fa77c-a487-4d68-8154-7ca4f4c6791e",
                           "isHook": true,
                           "skipped": false
                         }
@@ -352,7 +352,7 @@
                           "title": "have first properties inside the links when its not the first page",
                           "fullTitle": "Get Products Get Products with query string Get Products with page query get mandatory properties when its not the first page have first properties inside the links when its not the first page",
                           "timedOut": false,
-                          "duration": 1,
+                          "duration": 0,
                           "state": "passed",
                           "speed": "fast",
                           "pass": true,
@@ -361,8 +361,8 @@
                           "context": null,
                           "code": "if (totalPages > 1) {\n  expect(productsData.body.links).to.have.property('first');\n}",
                           "err": {},
-                          "uuid": "221dc294-822b-4fca-bef1-217f93fb973b",
-                          "parentUUID": "8f123a32-1c43-40be-b427-4d751e67e858",
+                          "uuid": "da51dc2c-46dc-498d-b853-d19d66a7c22c",
+                          "parentUUID": "f30fa77c-a487-4d68-8154-7ca4f4c6791e",
                           "isHook": false,
                           "skipped": false
                         },
@@ -379,21 +379,21 @@
                           "context": null,
                           "code": "if (totalPages > 1) {\n  expect(productsData.body.links).to.have.property('prev');\n}",
                           "err": {},
-                          "uuid": "9c490763-706a-4e67-96e5-fe67498240c9",
-                          "parentUUID": "8f123a32-1c43-40be-b427-4d751e67e858",
+                          "uuid": "94e6c4e3-6904-431d-997b-b6f2b1548ce3",
+                          "parentUUID": "f30fa77c-a487-4d68-8154-7ca4f4c6791e",
                           "isHook": false,
                           "skipped": false
                         }
                       ],
                       "suites": [],
                       "passes": [
-                        "221dc294-822b-4fca-bef1-217f93fb973b",
-                        "9c490763-706a-4e67-96e5-fe67498240c9"
+                        "da51dc2c-46dc-498d-b853-d19d66a7c22c",
+                        "94e6c4e3-6904-431d-997b-b6f2b1548ce3"
                       ],
                       "failures": [],
                       "pending": [],
                       "skipped": [],
-                      "duration": 1,
+                      "duration": 0,
                       "root": false,
                       "rootEmpty": false,
                       "_timeout": 5000

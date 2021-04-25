@@ -1,8 +1,10 @@
 import chai, { expect } from 'chai';
 import chaiSorted from 'chai-sorted';
+import faker from 'faker';
 import { getProducts } from '../helper/product_helper.js';
 import { isObject, isValidURL, isNaturalNumber, isArray } from '../utils/type.js';
 import { PAGINATION } from '../rules/products.js';
+import { EFFECTIVE } from '../constants/enum.js';
 
 chai.use(chaiSorted);
 
@@ -60,7 +62,7 @@ describe('Get Products', () => {
     describe('Get Products with page query', () => {
       let totalPages;
 
-      describe('get mandatory properties when its not the last page', () => {
+      context('get mandatory properties when its not the last page', () => {
         before(async () => {
           // TODO May be need to generate a random page number (Faker.js)
           productsData = await getProducts('page=1');
@@ -87,7 +89,7 @@ describe('Get Products', () => {
         })
       })
 
-      describe('get mandatory properties when its not the first page', () => {
+      context('get mandatory properties when its not the first page', () => {
         before(async () => {
           // TODO May be need to generate a random page number (Faker.js)
           productsData = await getProducts('page=2');
@@ -106,6 +108,44 @@ describe('Get Products', () => {
           }
         })
       })
+    })
+
+    describe('Get Products with effective query', () => {
+      it('validate query string parameter value', async () => {
+        const randomValue = faker.lorem.word();
+        if (!EFFECTIVE[randomValue]) {
+          productsData = await getProducts(`effective=${randomValue}`);
+          expect(productsData.status).to.be.eq(400);
+          expect(productsData.body.errors[0].title).to.be.eq('Invalid query string parameter value');
+        }
+      })
+
+      it('get correct result when query string parameter value is ALL', async () => {
+        productsData = await getProducts(`effective=${EFFECTIVE.ALL}`);
+        const { totalRecords } = productsData.body.meta;
+        const totalProductsData = await getProducts(`effective=${EFFECTIVE.ALL}&page-size=${totalRecords}`);
+        const { products } = totalProductsData.body.data;
+        expect(products.length).to.be.eq(totalRecords);
+      })
+
+      /* it('get correct result when query string parameter value is FUTURE', async () => {
+        productsData = await getProducts(`effective=${EFFECTIVE.FUTURE}`);
+        const { totalRecords } = productsData.body.meta;
+        const totalProductsData = await getProducts(`effective=${EFFECTIVE.FUTURE}&page-size=${totalRecords}`);
+        const { products } = totalProductsData.body.data;
+        let currentProduct = [];
+        if (products.length) {
+          products.forEach(product => {
+            const { effectiveFrom } = product;
+            if (!effectiveFrom) {
+
+            }
+        })
+        }
+
+        expect(currentProduct.length).to.be.eq(0);
+
+      }) */
     })
   })
 })
