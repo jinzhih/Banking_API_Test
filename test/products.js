@@ -6,6 +6,7 @@ import { isObject, isValidURL, isNaturalNumber, isArray } from '../utils/type.js
 import { PAGINATION } from '../rules/products.js';
 import { EFFECTIVE } from '../constants/enum.js';
 import { getProductsByEffective } from '../utils/tool.js';
+import qa from '../config/qa.js';
 
 chai.use(chaiSorted);
 
@@ -181,6 +182,24 @@ describe('Get Products', () => {
           return queryTime - lastUpdatedTime > 0;
         });
         expect(invalidProducts.length).to.be.eq(0);
+      })
+    })
+
+    describe.only('Get Products with brand query', () => {
+      it('return empty array when enter invalid brand value', async () => {
+        const randomBrand = faker.lorem.word();
+        if (randomBrand !== qa.brand) {
+          productsData = await getProducts(`brand=${randomBrand}`);
+          const { products } = productsData.body.data;
+          expect(products.length).to.be.eq(0);
+        }
+      })
+
+      it('return correct array when enter valid brand value', async () => {
+        productsData = await getProducts(`brand=${qa.brand}`);
+        const { products } = productsData.body.data;
+        const inValidProducts = products.filter(product => product.brand !== qa.brand);
+        expect(inValidProducts.length).to.be.eq(0);
       })
     })
   })
