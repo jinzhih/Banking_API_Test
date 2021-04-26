@@ -110,7 +110,6 @@ describe('Get Products', () => {
           }
         })
       })
-      
   })
 
     describe('Get Products with page-size query', () => {
@@ -130,7 +129,6 @@ describe('Get Products', () => {
         let pageSize;
         pageSize = faker.random.number(65);
         before(async () => {
-          // TODO May be need to generate a random page number (Faker.js)
           productsData = await getProducts(`page-size=${pageSize}`);
           totalRecords = productsData.body.meta.totalRecords;
         })
