@@ -110,6 +110,34 @@ describe('Get Products', () => {
           }
         })
       })
+      
+  })
+
+    describe.only('Get Products with page-size query', () => {
+      let totalRecords;
+      context('get correct page size when there is page-size query', () => {
+        let pageSize;
+        pageSize = 5;
+        before(async () => {
+          // TODO May be need to generate a random page number (Faker.js)
+          productsData = await getProducts(`page-size=${pageSize}`);
+          totalRecords = productsData.body.meta.totalRecords;
+        })
+
+        it('having correct page-size when query less than totalRecords', () => {
+          if (pageSize < totalRecords) {
+            const { products } = productsData.body.data;
+            expect(products).to.have.lengthOf(pageSize);
+          }
+        })
+
+        it('having correct page-size when query more than totalRecords', () => {
+          if (pageSize > totalRecords) {
+            const { products } = productsData.body.data;
+            expect(products).to.have.lengthOf(totalRecords);
+          }
+        })
+      })
     })
 
     describe('Get Products with effective query', () => {
@@ -185,7 +213,7 @@ describe('Get Products', () => {
       })
     })
 
-    describe.only('Get Products with brand query', () => {
+    describe('Get Products with brand query', () => {
       it('return empty array when enter invalid brand value', async () => {
         const randomBrand = faker.lorem.word();
         if (randomBrand !== qa.brand) {
