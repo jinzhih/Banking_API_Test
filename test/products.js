@@ -113,11 +113,22 @@ describe('Get Products', () => {
       
   })
 
-    describe.only('Get Products with page-size query', () => {
+    describe('Get Products with page-size query', () => {
       let totalRecords;
-      context('get correct page size when there is page-size query', () => {
+      context('get correct response when type of page-size query parameter is wrong', () => {
+        it('validate query string parameter value', async () => {
+          const randowValue = faker.lorem.word();
+          if (!Number.isFinite(randowValue)) {
+            productsData = await getProducts(`page-size=${randowValue}`)
+            expect(productsData.status).to.be.eq(400);
+            expect(productsData.body.errors[0].title).to.be.eq('Invalid query string parameter value')
+          }
+        })
+      })
+
+      context('get correct page size when there is correct parameter page-size query', () => {
         let pageSize;
-        pageSize = 5;
+        pageSize = faker.random.number(65);
         before(async () => {
           // TODO May be need to generate a random page number (Faker.js)
           productsData = await getProducts(`page-size=${pageSize}`);
