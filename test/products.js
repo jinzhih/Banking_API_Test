@@ -1,10 +1,12 @@
 import chai, { expect } from 'chai';
 import chaiSorted from 'chai-sorted';
 import faker from 'faker';
+import csv from 'csvtojson';
 import { getProducts } from '../helper/product_helper.js';
+import { getStandardProducts } from '../helper/csv_helper.js';
 import { isObject, isValidURL, isNaturalNumber, isArray } from '../utils/type.js';
 import { PAGINATION } from '../rules/products.js';
-import { EFFECTIVE } from '../constants/enum.js';
+import { EFFECTIVE, PRODUCT_CATEGORY } from '../constants/enum.js';
 import { getProductsByEffective } from '../utils/tool.js';
 import qa from '../config/qa.js';
 
@@ -12,6 +14,12 @@ chai.use(chaiSorted);
 
 describe('Get Products', () => {
   let productsData;
+  let standardProducts;
+
+  before(async () => {
+    standardProducts = await getStandardProducts();
+  })
+
   describe('Get Products without query string', () => {
     before(async () => {
       productsData = await getProducts();
@@ -185,7 +193,7 @@ describe('Get Products', () => {
       })
     })
 
-    describe.only('Get Products with brand query', () => {
+    describe('Get Products with brand query', () => {
       it('return empty array when enter invalid brand value', async () => {
         const randomBrand = faker.lorem.word();
         if (randomBrand !== qa.brand) {
@@ -200,6 +208,30 @@ describe('Get Products', () => {
         const { products } = productsData.body.data;
         const inValidProducts = products.filter(product => product.brand !== qa.brand);
         expect(inValidProducts.length).to.be.eq(0);
+      })
+    })
+
+    describe.only('Get Products with product-category query', () => {
+      it('return error when enter invalid product-category value', async () => {
+        const randomCategory = faker.lorem.word();
+        if (!PRODUCT_CATEGORY[randomCategory]) {
+          productsData = await getProducts(`product-category=${randomCategory}`);
+          expect(productsData.status).to.be.eq(400);
+          expect(productsData.body.errors[0].title).to.be.eq('Invalid query string parameter value');
+        }
+      })
+
+      it('return correct array structure when enter valid brand value', async () => {
+        // TODO Do we need to pass all the product-category separately, and run the test?
+        // For now, we just pass a valid category randomly
+        productsData = await getProducts(`product-category=${PRODUCT_CATEGORY.BUSINESS_LOANS}`);
+        const { products } = productsData.body.data;
+        const inValidProducts = products.filter(product => product.productCategory !== PRODUCT_CATEGORY.BUSINESS_LOANS);
+        expect(inValidProducts.length).to.be.eq(0);
+      })
+
+      it('return correct array value when enter valid brand value', async () => {
+
       })
     })
   })
