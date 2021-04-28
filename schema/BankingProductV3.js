@@ -1,28 +1,41 @@
-import yup from 'yup';
-import { PRODUCT_CATEGORY_ARRAY } from '../constants/enum.js';
+import Joi from 'joi';
+import { PRODUCT_CATEGORY } from '../constants/enum.js';
 import { ASCIIStringRegex, DateTimeStringRegex } from '../utils/regex.js';
 
-export const schema = yup.object().shape({
-  productID: yup.string().required().matches(ASCIIStringRegex),
-  effectiveFrom: yup.string().notRequired().nullable().matches(DateTimeStringRegex),
-  effectiveTo: yup.string().notRequired().nullable().matches(DateTimeStringRegex),
-  lastUpdated: yup.string().required().matches(DateTimeStringRegex),
-  productCategory: yup.string().oneOf(PRODUCT_CATEGORY_ARRAY),
-  name: yup.string().required(),
-  description: yup.string().required(),
-  brand: yup.string().required(),
-  brandName: yup.string().notRequired(),
-  applicationUri: yup.url().notRequired(),
-  isTailored: yup.boolean().required(),
-  additionalInformation: yup.object().nullable().default(null).shape({
-    overviewUri: yup.url().notRequired(),
-    termsUri: yup.url().notRequired(),
-    eligibilityUri: yup.url().notRequired(),
-    feesAndPricingUri: yup.url().notRequired(),
-    bundleUri: yup.url().notRequired(),
+export const BankingProductV3Schema = Joi.object({
+  productId: Joi.string().required().pattern(ASCIIStringRegex),
+  effectiveFrom: Joi.string().allow(null, '').pattern(DateTimeStringRegex),
+  effectiveTo: Joi.string().allow(null, '').pattern(DateTimeStringRegex),
+  lastUpdated: Joi.string().required().pattern(DateTimeStringRegex),
+  productCategory: Joi.string().valid(
+    PRODUCT_CATEGORY.BUSINESS_LOANS,
+    PRODUCT_CATEGORY.CRED_AND_CHRG_CARDS,
+    PRODUCT_CATEGORY.LEASES,
+    PRODUCT_CATEGORY.MARGIN_LOANS,
+    PRODUCT_CATEGORY.OVERDRAFTS,
+    PRODUCT_CATEGORY.PERS_LOANS,
+    PRODUCT_CATEGORY.REGULATED_TRUST_ACCOUNTS,
+    PRODUCT_CATEGORY.RESIDENTIAL_MORTGAGES,
+    PRODUCT_CATEGORY.TERM_DEPOSITS,
+    PRODUCT_CATEGORY.TRADE_FINANCE,
+    PRODUCT_CATEGORY.TRANS_AND_SAVINGS_ACCOUNTS,
+    PRODUCT_CATEGORY.TRAVEL_CARDS,
+  ),
+  name: Joi.string().required(),
+  description: Joi.string().required(),
+  brand: Joi.string().required(),
+  brandName: Joi.string().allow(null, ''),
+  applicationUri: Joi.string().uri().allow(null, ''),
+  isTailored: Joi.boolean().required(),
+  additionalInformation: Joi.object().allow(null).keys({
+    overviewUri: Joi.string().uri().allow(null, ''),
+    termsUri: Joi.string().uri().allow(null, ''),
+    eligibilityUri: Joi.string().uri().allow(null, ''),
+    feesAndPricingUri: Joi.string().uri().allow(null, ''),
+    bundleUri: Joi.string().uri().allow(null, ''),
   }),
-  cardArt: yup.object().nullable().default(null).shape({
-    title: yup.string().notRequired(),
-    imageUri: yup.url().required(),
+  cardArt: Joi.array().items({
+    title: Joi.string().allow(null, ''),
+    imageUri: Joi.string().uri().required(),
   }),
 });

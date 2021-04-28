@@ -6,7 +6,8 @@ import { getProducts } from '../helper/product_helper.js';
 import { getStandardProducts } from '../helper/csv_helper.js';
 import { isObject, isValidURL, isNaturalNumber, isArray } from '../utils/type.js';
 import { PAGINATION } from '../rules/products.js';
-import { EFFECTIVE, PRODUCT_CATEGORY } from '../constants/enum.js';
+import { EFFECTIVE, PRODUCT_CATEGORY, PRODUCT_CATEGORY_ARRAY } from '../constants/enum.js';
+import { BankingProductV3Schema } from '../schema/BankingProductV3.js';
 import { getProductsByEffective } from '../utils/tool.js';
 import qa from '../config/qa.js';
 
@@ -211,7 +212,7 @@ describe('Get Products', () => {
       })
     })
 
-    describe.only('Get Products with product-category query', () => {
+    describe('Get Products with product-category query', () => {
       it('return error when enter invalid product-category value', async () => {
         const randomCategory = faker.lorem.word();
         if (!PRODUCT_CATEGORY[randomCategory]) {
@@ -221,16 +222,28 @@ describe('Get Products', () => {
         }
       })
 
-      it('return correct array structure when enter valid brand value', async () => {
+      it.only('return correct data structure when enter a valid product-category value', async () => {
         // TODO Do we need to pass all the product-category separately, and run the test?
         // For now, we just pass a valid category randomly
-        productsData = await getProducts(`product-category=${PRODUCT_CATEGORY.BUSINESS_LOANS}`);
+        const randomIndex = faker.datatype.number(PRODUCT_CATEGORY_ARRAY.length - 1);
+        const randomCategory = PRODUCT_CATEGORY_ARRAY[randomIndex];
+        productsData = await getProducts(`product-category=${randomCategory}`);
+        // console.log(productsData.body)
         const { products } = productsData.body.data;
-        const inValidProducts = products.filter(product => product.productCategory !== PRODUCT_CATEGORY.BUSINESS_LOANS);
-        expect(inValidProducts.length).to.be.eq(0);
+        if (products.length) {
+          await products.forEach( product => {
+            const res = BankingProductV3Schema.validate(product)
+            if (res.error) {
+              console.log(res.error);
+            }
+          })
+        }
+        // console.log(products);
+        // const inValidProducts = products.filter(product => product.productCategory !== PRODUCT_CATEGORY.BUSINESS_LOANS);
+        // expect(inValidProducts.length).to.be.eq(0);
       })
 
-      it('return correct array value when enter valid brand value', async () => {
+      it('return correct data value when enter valid product-category value', async () => {
 
       })
     })
