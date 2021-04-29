@@ -228,19 +228,18 @@ describe('Get Products', () => {
         const randomIndex = faker.datatype.number(PRODUCT_CATEGORY_ARRAY.length - 1);
         const randomCategory = PRODUCT_CATEGORY_ARRAY[randomIndex];
         productsData = await getProducts(`product-category=${randomCategory}`);
-        // console.log(productsData.body)
+        let error = null;
         const { products } = productsData.body.data;
         if (products.length) {
-          await products.forEach( product => {
+          await products.forEach(product => {
             const res = BankingProductV3Schema.validate(product)
             if (res.error) {
-              console.log(res.error);
+              error = res.error;
             }
           })
         }
-        // console.log(products);
-        // const inValidProducts = products.filter(product => product.productCategory !== PRODUCT_CATEGORY.BUSINESS_LOANS);
-        // expect(inValidProducts.length).to.be.eq(0);
+        let errorMsg = error ? error.details[0].message : null;
+        expect(error).to.be.eq(null, errorMsg);
       })
 
       it('return correct data value when enter valid product-category value', async () => {
