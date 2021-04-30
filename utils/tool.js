@@ -1,3 +1,4 @@
+import isEqual from 'lodash/isEqual.js';
 import { EFFECTIVE } from '../constants/enum.js';
 
 export const getProductsByEffective = (products, effective) => {
@@ -26,4 +27,29 @@ export const toLowerCaseKeys = (object) => {
       carry[key.toLowerCase()] = value;
       return carry
     }, {})
+}
+
+export const schemaValueCheck = (obj, standardObj) => {
+  const error = [];
+  const testObj = { ...obj };
+
+  Object.keys(testObj).forEach(key => {
+    let objValue = testObj[key];
+    if ((typeof (objValue) === 'string')) {
+      objValue = objValue.trim();
+    }
+    let standardObjValue = standardObj[key];
+    if ((typeof (standardObjValue) === 'string')) {
+      standardObjValue = standardObjValue.trim();
+    }
+    if (isEqual(objValue, standardObjValue)) return;
+    error.push({
+      obj: testObj.name,
+      field: key,
+      value: objValue,
+      standardValue: standardObjValue,
+    })
+  });
+
+  return error;
 }

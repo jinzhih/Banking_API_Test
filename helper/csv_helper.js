@@ -3,7 +3,12 @@ import csv from 'csvtojson';
 export const getStandardProducts = async () => {
   const standardProducts = await csv()
     .fromFile('./Product.csv')
-    .subscribe((obj, index) => {
+    .subscribe((obj) => {
+      // 'null' -> null
+      Object.keys(obj).forEach(function (key) {
+        if (this[key] === 'null') this[key] = null;
+      }, obj);
+
       obj.productId = obj.ProductID;
       obj.effectiveFrom = obj.Effectivefrom;
       obj.effectiveTo = obj.Effectiveto;
@@ -14,7 +19,7 @@ export const getStandardProducts = async () => {
       obj.brand = obj.Brand;
       obj.brandName = obj.Brandname;
       obj.applicationUri = obj.Applicationuri;
-      obj.isTailored = obj.Istailored;
+      obj.isTailored = obj.Istailored === 'TRUE';
       obj.additionalInformation = {
         overviewUri: obj.Additionalinformation_Overviewuri,
         termsUri: obj.Additionalinformation_Termsuri,
