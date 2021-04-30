@@ -1,7 +1,6 @@
 import chai, { expect } from 'chai';
 import chaiSorted from 'chai-sorted';
 import faker from 'faker';
-import csv from 'csvtojson';
 import { getProducts } from '../helper/product_helper.js';
 import { getStandardProducts } from '../helper/csv_helper.js';
 import { isObject, isValidURL, isNaturalNumber, isArray } from '../utils/type.js';
@@ -228,6 +227,8 @@ describe('Get Products', () => {
         const randomIndex = faker.datatype.number(PRODUCT_CATEGORY_ARRAY.length - 1);
         const randomCategory = PRODUCT_CATEGORY_ARRAY[randomIndex];
         productsData = await getProducts(`product-category=${randomCategory}`);
+        const a = standardProducts[0];
+        console.log(a);
         let error = null;
         const { products } = productsData.body.data;
         if (products.length) {

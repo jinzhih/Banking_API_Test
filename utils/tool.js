@@ -18,3 +18,12 @@ export const getProductsByEffective = (products, effective) => {
   })
   return res;
 }
+
+export const toLowerCaseKeys = (object) => {
+  return Object
+    .entries(object)
+    .reduce((carry, [key, value]) => {
+      carry[key.toLowerCase()] = value;
+      return carry
+    }, {})
+}
