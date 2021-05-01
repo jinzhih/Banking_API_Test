@@ -2,6 +2,7 @@ import chai, { expect } from 'chai';
 import chaiSorted from 'chai-sorted';
 import faker from 'faker';
 import addContext from 'mochawesome/addContext.js';
+import request from '../config/common.js';
 import { getProducts } from '../helper/product_helper.js';
 import { getStandardProducts } from '../helper/csv_helper.js';
 import { isObject, isValidURL, isNaturalNumber, isArray } from '../utils/type.js';
@@ -20,6 +21,44 @@ describe('Get Products', () => {
 
   before(async () => {
     standardProducts = await getStandardProducts();
+  })
+
+  describe('Negative testing', () => {
+    it('Return error when missing x-v field in request header', async () => {
+      const res = await request.get('/products')
+      expect(res.statusCode).to.be.eq(406);
+      expect(res.body).to.have.property('errors');
+    })
+
+    it('Return error when enter invalid x-v field in request header', async () => {
+      const randomValue = faker.lorem.word();
+      const res = await request
+        .get('/products')
+        .set('x-v', randomValue)
+      expect(res.statusCode).to.be.eq(406);
+      expect(res.body).to.have.property('errors');
+    })
+
+    it('Return error when x-v value is greater than current highest version', async () => {
+      const randomNumber = faker.datatype.number({ min: Number(qa.currentVersion) + 1 });
+      const res = await request
+        .get('/products')
+        .set('x-v', randomNumber)
+      expect(res.statusCode).to.be.eq(406);
+      expect(res.body).to.have.property('errors');
+    })
+
+    it('Return error when set an unacceptable Accept value in request header', async () => {
+      const randomValue = faker.lorem.word();
+      if (randomValue !== HEADERS_STANDARD.CONTENT_TYPE) {
+        const res = await request
+          .get('/products')
+          .set('x-v', qa.currentVersion)
+          .set('Accept', randomValue)
+        expect(res.statusCode).to.be.eq(406);
+        expect(res.body).to.have.property('errors');
+      }
+    })
   })
 
   describe('Get Products without query string', () => {
