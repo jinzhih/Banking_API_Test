@@ -186,24 +186,26 @@ describe('Get Products', () => {
       it('get correct result when query string parameter value is FUTURE', async () => {
         productsData = await getProducts(`effective=${EFFECTIVE.FUTURE}`);
         const { totalRecords } = productsData.body.meta;
-        if (totalRecords === 0) return;
-        if (totalRecords > 25) {
-          productsData = await getProducts(`effective=${EFFECTIVE.FUTURE}&page-size=${totalRecords}`);
+        if (totalRecords) {
+          if (totalRecords > 25) {
+            productsData = await getProducts(`effective=${EFFECTIVE.FUTURE}&page-size=${totalRecords}`);
+          }
+          const { products } = productsData.body.data;
+          const futureProducts = getProductsByEffective(products, EFFECTIVE.FUTURE);
+          expect(products.length).to.be.eq(futureProducts.length);
         }
-        const { products } = productsData.body.data;
-        const futureProducts = getProductsByEffective(products, EFFECTIVE.FUTURE);
-        expect(products.length).to.be.eq(futureProducts.length);
       })
-      // TODO Confirm the effective filter with bank
-      /*       it('get correct result when query string parameter value is CURRENT', async () => {
-              productsData = await getProducts(`effective=${EFFECTIVE.CURRENT}`);
-              const { totalRecords } = productsData.body.meta;
-              if (totalRecords === 0) return;
-              const totalProductsData = await getProducts(`effective=${EFFECTIVE.CURRENT}&page-size=${totalRecords}`);
-              const { products } = totalProductsData.body.data;
-              const currentProducts = getProductsByEffective(products, EFFECTIVE.CURRENT);
-              expect(products.length).to.be.eq(currentProducts.length);
-            }) */
+      // TODO Confirm the effective filter
+      it('get correct result when query string parameter value is CURRENT', async () => {
+        productsData = await getProducts(`effective=${EFFECTIVE.CURRENT}`);
+        const { totalRecords } = productsData.body.meta;
+        if (totalRecords === 0) return;
+        const totalProductsData = await getProducts(`effective=${EFFECTIVE.CURRENT}&page-size=${totalRecords}`);
+        const { products } = totalProductsData.body.data;
+        const currentProducts = getProductsByEffective(products, EFFECTIVE.CURRENT);
+        // console.log(currentProducts);
+        expect(products.length).to.be.eq(currentProducts.length);
+      })
     })
 
     describe('Get Products with updated-since query', () => {
@@ -217,7 +219,7 @@ describe('Get Products', () => {
         }
       })
 
-      it('get correct result when query string parameter value is valid', async () => {
+      it('Do not contains unmatched products when updated-since parameter value is valid', async () => {
         const randomDate = faker.date.past(1).toISOString();
         productsData = await getProducts(`updated-since=${randomDate}`);
         const { totalRecords } = productsData.body.meta;
@@ -245,7 +247,7 @@ describe('Get Products', () => {
         }
       })
 
-      it('return correct array when enter valid brand value', async () => {
+      it('Do not contains unmatched products when brand parameter value is valid', async () => {
         productsData = await getProducts(`brand=${qa.brand}`);
         const { products } = productsData.body.data;
         const inValidProducts = products.filter(product => product.brand !== qa.brand);
@@ -254,7 +256,7 @@ describe('Get Products', () => {
     })
 
     describe('Get Products with product-category query', () => {
-      it('return error when enter invalid product-category value', async () => {
+      it('return error when product-category parameter value is invalid', async () => {
         const randomCategory = faker.lorem.word();
         if (!PRODUCT_CATEGORY[randomCategory]) {
           productsData = await getProducts(`product-category=${randomCategory}`);
