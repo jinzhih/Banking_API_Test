@@ -6,11 +6,10 @@ import request from '../config/common.js';
 import { getProducts } from '../helper/product_helper.js';
 import { getStandardProducts } from '../helper/csv_helper.js';
 import { isObject, isValidURL, isNaturalNumber, isArray } from '../utils/type.js';
-import { PAGINATION } from '../rules/products.js';
+import { PAGINATION, HEADERS_STANDARD } from '../constants/rules.js';
 import { EFFECTIVE, PRODUCT_CATEGORY, PRODUCT_CATEGORY_ARRAY } from '../constants/enum.js';
 import { BankingProductV3Schema } from '../schema/BankingProductV3.js';
 import { getProductsByEffective, schemaValueCheck } from '../utils/tool.js';
-import { HEADERS_STANDARD } from '../rules/common.js'
 import qa from '../config/qa.js';
 
 chai.use(chaiSorted);
@@ -68,7 +67,7 @@ describe('Get Products', () => {
 
     it('get correct format of response header', function () {
       const { header } = productsData;
-      expect(header['x-v']).to.be.eq(qa.version);
+      expect(header['x-v']).to.be.eq(qa.currentVersion);
       expect(header['content-type']).to.be.eq(HEADERS_STANDARD.CONTENT_TYPE);
 
       if (!header.hasOwnProperty('x-fapi-interaction-id')) {
@@ -220,6 +219,63 @@ describe('Get Products', () => {
       })
     })
 
+    describe('Get Products with page-size query', () => {
+      let totalRecords;
+
+      context('Negative testing', () => {
+        it('Return error when page-size parameter value is incorrect', async () => {
+          const randowValue = faker.lorem.word();
+          if (!isNaturalNumber(randowValue)) {
+            productsData = await getProducts(`page-size=${randowValue}`)
+            expect(productsData.statusCode).to.be.eq(400);
+            expect(productsData.body).to.have.property('errors');
+          }
+        })
+
+        it('Return error when page-size parameter value too small (less than 1)', async () => {
+          const randowNumber = faker.datatype.number();
+          let pageSize;
+          if (randowNumber === 0) {
+            pageSize = 0;
+          } else {
+            pageSize = faker.datatype.number() * -1;
+          }
+          productsData = await getProducts(`page-size=${pageSize}`)
+          expect(productsData.statusCode).to.be.eq(422);
+          expect(productsData.body).to.have.property('errors');
+        })
+
+        it('Return error when page-size parameter value too large (greater than 1000)', async () => {
+          const pageSize = faker.datatype.number({ min: PAGINATION.MAX_PAGE_SIZE + 1 });
+          productsData = await getProducts(`page-size=${pageSize}`)
+          expect(productsData.statusCode).to.be.eq(422);
+          expect(productsData.body).to.have.property('errors');
+        })
+      })
+
+      context('get correct page size when there is correct parameter page-size query', () => {
+        let pageSize;
+        before(async () => {
+          productsData = await getProducts();
+          totalRecords = productsData.body.meta.totalRecords;
+        })
+
+        it('having correct page-size when page-size is no greater than totalRecords', async () => {
+          pageSize = faker.datatype.number({ min: 1, max: totalRecords });
+          productsData = await getProducts(`page-size=${pageSize}`);
+          const { products } = productsData.body.data;
+          expect(products).to.have.lengthOf(pageSize);
+        })
+
+        it('having correct page-size when page-size is greater than totalRecords', async () => {
+          pageSize = faker.datatype.number({ min: totalRecords + 1, max: PAGINATION.MAX_PAGE_SIZE });
+          productsData = await getProducts(`page-size=${pageSize}`);
+          const { products } = productsData.body.data;
+          expect(products).to.have.lengthOf(totalRecords);
+        })
+      })
+    })
+
     describe('Get Products with effective query', () => {
       it('validate query string parameter value', async () => {
         const randomValue = faker.lorem.word();
@@ -254,13 +310,19 @@ describe('Get Products', () => {
         }
       })
       // TODO Confirm the effective filter
-      it('get correct result when query string parameter value is CURRENT', async () => {
+      it('get correct result when query string parameter value is CURRENT', async function () {
         productsData = await getProducts(`effective=${EFFECTIVE.CURRENT}`);
         const { totalRecords } = productsData.body.meta;
         if (totalRecords === 0) return;
         const totalProductsData = await getProducts(`effective=${EFFECTIVE.CURRENT}&page-size=${totalRecords}`);
         const { products } = totalProductsData.body.data;
         const currentProducts = getProductsByEffective(products, EFFECTIVE.CURRENT);
+        if (products.length !== currentProducts.length) {
+          addContext(this, {
+            title: 'Incorrect effective filter',
+            value: products,
+          });
+        }
         // console.log(currentProducts);
         expect(products.length).to.be.eq(currentProducts.length);
       })
