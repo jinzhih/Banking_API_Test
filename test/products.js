@@ -9,6 +9,7 @@ import { PAGINATION } from '../rules/products.js';
 import { EFFECTIVE, PRODUCT_CATEGORY, PRODUCT_CATEGORY_ARRAY } from '../constants/enum.js';
 import { BankingProductV3Schema } from '../schema/BankingProductV3.js';
 import { getProductsByEffective, schemaValueCheck } from '../utils/tool.js';
+import { HEADERS_STANDARD } from '../rules/common.js'
 import qa from '../config/qa.js';
 
 chai.use(chaiSorted);
@@ -26,8 +27,26 @@ describe('Get Products', () => {
       productsData = await getProducts();
     })
 
-    it('get correct format of response', () => {
-      expect(productsData.status).to.be.eq(200);
+    it('get correct format of response header', function () {
+      const { header } = productsData;
+      expect(header['x-v']).to.be.eq(qa.version);
+      expect(header['content-type']).to.be.eq(HEADERS_STANDARD.CONTENT_TYPE);
+
+      if (!header.hasOwnProperty('x-fapi-interaction-id')) {
+        addContext(this, {
+          title: 'Missing mandatory field: x-fapi-interaction-id on response headers',
+          value: header,
+        });
+      }
+      expect(header.hasOwnProperty('x-fapi-interaction-id')).to.be.eq(
+        true,
+        'Missing mandatory field: x-fapi-interaction-id on response headers',
+      );
+
+      if (header.hasOwnProperty('retry-after')) {
+        expect(header['retry-after']).to.be.a('number');
+        expect(productsData.statusCode).to.be.eq(429);
+      }
     })
 
     it('contains data property and the type is object', () => {
