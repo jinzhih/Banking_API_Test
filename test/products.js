@@ -1,6 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiSorted from 'chai-sorted';
 import faker from 'faker';
+import addContext from 'mochawesome/addContext.js';
 import { getProducts } from '../helper/product_helper.js';
 import { getStandardProducts } from '../helper/csv_helper.js';
 import { isObject, isValidURL, isNaturalNumber, isArray } from '../utils/type.js';
@@ -65,6 +66,47 @@ describe('Get Products', () => {
     it('products should ordered in descending order according to lastUpdated', () => {
       const { products } = productsData.body.data;
       expect(products).to.be.descendingBy('lastUpdated');
+    })
+
+    it('Products property do not contains invalid products schema', async function () {
+      let errorArray = [];
+      const { products } = productsData.body.data;
+      if (products.length) {
+        await products.forEach(product => {
+          const res = BankingProductV3Schema.validate(product)
+          if (res.error) {
+            errorArray = errorArray.concat(res.error);
+          }
+        })
+      }
+      if (errorArray.length) {
+        addContext(this, {
+          title: 'Incorrect product schema',
+          value: errorArray,
+        });
+      }
+      expect(errorArray.length).to.be.eq(0);
+    })
+
+    it('products property do not contains unmatched value', async function () {
+      const { products } = productsData.body.data;
+      let errorArray = [];
+      if (products.length) {
+        products.forEach(product => {
+          const standardData = standardProducts.filter(i => product.productId === i.productId)[0];
+          const error = schemaValueCheck(product, standardData);
+          if (error.length) {
+            errorArray = errorArray.concat(error);
+          }
+        })
+      }
+      if (errorArray.length) {
+        addContext(this, {
+          title: 'Unmatched field value',
+          value: errorArray,
+        });
+      }
+      expect(errorArray.length).to.be.eq(0);
     })
   })
 
@@ -221,44 +263,18 @@ describe('Get Products', () => {
         }
       })
 
-      it('return correct data structure when enter a valid product-category value', async () => {
+      it('Do not return unmatched products when enter a valid product-category value', async () => {
         // TODO Do we need to pass all the product-category separately, and run the test?
         // For now, we just pass a valid category randomly
         const randomIndex = faker.datatype.number(PRODUCT_CATEGORY_ARRAY.length - 1);
         const randomCategory = PRODUCT_CATEGORY_ARRAY[randomIndex];
         productsData = await getProducts(`product-category=${randomCategory}`);
-        let error = null;
+        let unmatchedProducts = [];
         const { products } = productsData.body.data;
         if (products.length) {
-          await products.forEach(product => {
-            const res = BankingProductV3Schema.validate(product)
-            if (res.error) {
-              error = res.error;
-            }
-          })
+          unmatchedProducts = products.filter(product => product.productCategory !== randomCategory)
         }
-        let errorMsg = error ? error.details[0].message : null;
-        expect(error).to.be.eq(null, errorMsg);
-      })
-
-      it.only('return correct data value when enter valid product-category value', async () => {
-        const randomIndex = faker.datatype.number(PRODUCT_CATEGORY_ARRAY.length - 1);
-        const randomCategory = PRODUCT_CATEGORY_ARRAY[randomIndex];
-        productsData = await getProducts(`product-category=${randomCategory}`);
-        const { products } = productsData.body.data;
-        let errorArray = [];
-        if (products.length) {
-          const filteredStandardProducts = standardProducts.filter(i => i.productCategory === randomCategory);
-          products.forEach(product => {
-            const standardData = filteredStandardProducts.filter(i => product.productId === i.productId)[0];
-            const error = schemaValueCheck(product, standardData);
-            if (error.length) {
-              errorArray = errorArray.concat(error);
-            }
-          })
-        }
-        let errorMsg = errorArray[0] ? `Incorrect ${errorArray[0].field} value: ${errorArray[0].value} in ${errorArray[0].obj}, should be : ${errorArray[0].standardValue}.` : null;
-        expect(errorArray.length).to.be.eq(0, errorMsg);
+        expect(unmatchedProducts).to.have.lengthOf(0);
       })
     })
   })
