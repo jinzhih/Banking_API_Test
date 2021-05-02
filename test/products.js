@@ -8,7 +8,7 @@ import { getStandardProducts } from '../helper/csv_helper.js';
 import { isObject, isValidURL, isNaturalNumber, isArray } from '../utils/type.js';
 import { PAGINATION, HEADERS_STANDARD } from '../constants/rules.js';
 import { EFFECTIVE, PRODUCT_CATEGORY, PRODUCT_CATEGORY_ARRAY } from '../constants/enum.js';
-import { BankingProductV3Schema } from '../schema/BankingProductV3.js';
+import { BankingProductV3Schema } from '../schema/product/BankingProductV3.js';
 import { getProductsByEffective, schemaValueCheck } from '../utils/tool.js';
 import qa from '../config/qa.js';
 

@@ -7,4 +7,3 @@ export const BankingProductBundle = Joi.object({
   additionalInfoUri: Joi.string().uri().allow(null, ''),
   productIds: Joi.array().items(Joi.string().allow(null, '')).allow(null),
 });
-

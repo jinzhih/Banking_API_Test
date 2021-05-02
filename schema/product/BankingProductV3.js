@@ -1,13 +1,13 @@
 import Joi from 'joi';
-import { PRODUCT_CATEGORY } from '../constants/enum.js';
-import { ASCIIStringRegex, DateTimeStringRegex } from '../utils/regex.js';
+import { PRODUCT_CATEGORY } from '../../constants/enum.js';
+import { ASCIIStringRegex, DateTimeStringRegex } from '../../utils/regex.js';
 
 export const BankingProductV3Schema = Joi.object({
   productId: Joi.string().required().pattern(ASCIIStringRegex),
   effectiveFrom: Joi.string().allow(null, '').pattern(DateTimeStringRegex),
   effectiveTo: Joi.string().allow(null, '').pattern(DateTimeStringRegex),
   lastUpdated: Joi.string().required().pattern(DateTimeStringRegex),
-  productCategory: Joi.string().valid(
+  productCategory: Joi.string().required().valid(
     PRODUCT_CATEGORY.BUSINESS_LOANS,
     PRODUCT_CATEGORY.CRED_AND_CHRG_CARDS,
     PRODUCT_CATEGORY.LEASES,
