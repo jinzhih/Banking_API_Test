@@ -1,5 +1,6 @@
 import isEqual from 'lodash/isEqual.js';
-import { EFFECTIVE } from '../constants/enum.js';
+import isError from 'lodash/isError.js';
+import { EFFECTIVE, FEE_TYPE } from '../constants/enum.js';
 
 export const getProductsByEffective = (products, effective) => {
   const res = [];
@@ -52,4 +53,11 @@ export const schemaValueCheck = (obj, standardObj) => {
   });
 
   return error;
+}
+
+export const bankingProductFeeSchemaPolyfill = (obj) => {
+  if (!isError(obj.error)) return true;
+  const { label, value } = obj.error.details[0].context;
+  if ((label === 'value') && (value.feeType === FEE_TYPE.VARIABLE)) return true;
+  return obj;
 }
