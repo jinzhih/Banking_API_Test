@@ -1,8 +1,9 @@
 import Joi from 'joi';
 import { ELIGIBILITY_TYPE } from '../../constants/enum.js';
+import { PositiveIntegerRegex } from '../../utils/regex.js';
 
 export const BankingProductEligibility = Joi.object({
-  eligibilityType: Joi.string().required().valid(
+  eligibilityType: Joi.string().required()().valid(
     ELIGIBILITY_TYPE.BUSINESS,
     ELIGIBILITY_TYPE.EMPLOYMENT_STATUS,
     ELIGIBILITY_TYPE.MAX_AGE,
@@ -22,28 +23,28 @@ export const BankingProductEligibility = Joi.object({
         switch: [
           {
             is: ELIGIBILITY_TYPE.EMPLOYMENT_STATUS,
-            then: Joi.string().required,
+            then: Joi.string().required(),
           },
           {
             is: ELIGIBILITY_TYPE.MAX_AGE,
-            then: Joi.string().required,
+            then: Joi.string().required().pattern(PositiveIntegerRegex),
           },
           {
             is: ELIGIBILITY_TYPE.MIN_AGE,
-            then: Joi.string().required,
+            then: Joi.string().required().pattern(PositiveIntegerRegex),
           },
           {
             is: ELIGIBILITY_TYPE.MIN_INCOME,
-            then: Joi.string().required,
+            then: Joi.string().required(), // TODO AmountStringRegex
           },
           {
             is: ELIGIBILITY_TYPE.MIN_TURNOVER,
-            then: Joi.string().required,
+            then: Joi.string().required(), // TODO AmountStringRegex
           },
           {
             is: ELIGIBILITY_TYPE.RESIDENCY_STATUS,
-            then: Joi.string().required,
-            otherwise: Joi.string().allow(null, ''),
+            then: Joi.string().required(),
+            otherwise: Joi.forbidden(),
           },
         ],
       }),
@@ -51,7 +52,7 @@ export const BankingProductEligibility = Joi.object({
     .when('eligibilityType',
       {
         is: ELIGIBILITY_TYPE.OTHER,
-        then: Joi.string().required,
+        then: Joi.string().required(),
         otherwise: Joi.string().allow(null, ''),
       }),
   additionalInfoUri: Joi.string().uri().allow(null, ''),

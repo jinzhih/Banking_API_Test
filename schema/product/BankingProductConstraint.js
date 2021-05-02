@@ -9,7 +9,33 @@ export const BankingProductConstraint = Joi.object({
     CONSTRAINT_TYPE.MIN_LIMIT,
     CONSTRAINT_TYPE.OPENING_BALANCE,
   ),
-  additionalValue: Joi.string().required(),
+  additionalValue: Joi
+    .when('constraintType',
+      {
+        switch: [
+          {
+            is: CONSTRAINT_TYPE.MAX_BALANCE,
+            then: Joi.string().required(), // TODO AmountStringRegex
+          },
+          {
+            is: CONSTRAINT_TYPE.MAX_LIMIT,
+            then: Joi.string().required(), // TODO AmountStringRegex
+          },
+          {
+            is: CONSTRAINT_TYPE.MIN_BALANCE,
+            then: Joi.string().required(), // TODO AmountStringRegex
+          },
+          {
+            is: CONSTRAINT_TYPE.MIN_LIMIT,
+            then: Joi.string().required(), // TODO AmountStringRegex
+          },
+          {
+            is: CONSTRAINT_TYPE.OPENING_BALANCE,
+            then: Joi.string().required(), // TODO AmountStringRegex
+            otherwise: Joi.forbidden(),
+          },
+        ],
+      }),
   additionalInfo: Joi.string().allow(null, ''),
   additionalInfoUri: Joi.string().uri().allow(null, ''),
 });
