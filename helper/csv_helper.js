@@ -52,21 +52,75 @@ export const getStandardProducts = async () => {
   return standardProducts;
 }
 
-export const getStandardProductsDetail = async () => {
-  const standardProductsDetail = await csv({
+export const getStandardProductsBundle = async () => {
+  const standardProductsBundle = await csv({
     noheader: false,
-    headers: ['id', 'productId', 'name', 'description', 'additionalInfo', 'additionalInfoUri', 'productIds'],
+    headers: [
+      'id',
+      'productId',
+      'name',
+      'description',
+      'additionalInfo',
+      'additionalInfoUri',
+      'productIds',
+    ],
     colParser: {
       'id': 'omit',
-      'name': (item) => {
-        console.log(item)
-        return item;
+      'productIds': (item) => {
+        if (item === '') return null;
+        return [item];
       },
     },
   })
-    .fromFile('csv/Bundle.csv')
-    .subscribe((obj) => {
-      console.log(obj)
-    });
-  return standardProductsDetail;
+    .fromFile('csv/Bundle.csv');
+
+  return standardProductsBundle
+};
+
+export const getStandardProductsFeature = async () => {
+  const standardProductsFeature = await csv({
+    noheader: false,
+    headers: [
+      'id',
+      'productId',
+      'name',
+      'featureType',
+      'additionalValue',
+      'additionalInfo',
+      'additionalInfoUri',
+    ],
+    colParser: {
+      'id': 'omit',
+    },
+  })
+    .fromFile('csv/Feature.csv')
+    .subscribe(obj => {
+      // 'null' -> null
+      Object.keys(obj).forEach(function (key) {
+        if (this[key] === 'null') this[key] = null;
+      }, obj);
+    })
+
+  return standardProductsFeature
+}
+
+export const getStandardProductsConstraint = async () => {
+  const standardProductsConstraint = await csv({
+    noheader: false,
+    headers: [
+      'id',
+      'productId',
+      'name',
+      'constraintType',
+      'additionalValue',
+      'additionalInfo',
+      'additionalInfoUri',
+    ],
+    colParser: {
+      'id': 'omit',
+    },
+  })
+    .fromFile('csv/Constraint.csv')
+
+  return standardProductsConstraint
 }

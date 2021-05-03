@@ -1,12 +1,12 @@
 import chai, { expect } from 'chai';
-import { getStandardProductsDetail } from '../helper/csv_helper.js';
+import { getStandardProductsConstraint } from '../helper/csv_helper.js';
 
 describe.only('Get Product Detail', () => {
   let productData;
   let standardProductsDetail;
 
   before(async () => {
-    standardProductsDetail = await getStandardProductsDetail();
+    standardProductsDetail = await getStandardProductsConstraint();
   })
 
   describe('test', () => {
