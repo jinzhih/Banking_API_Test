@@ -5,7 +5,7 @@ import { bankingProductFeeSchemaPolyfill } from '../utils/tool.js'
 import { FEE_TYPE } from '../constants/enum.js';
 
 describe('Schema Test', () => {
-  context.only('BankingProductFee Schema Test', () => {
+  context('BankingProductFee Schema Test', () => {
     it('return error when name field is missing', () => {
       const obj = {
         feeType: 'type',
