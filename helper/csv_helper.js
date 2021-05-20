@@ -72,7 +72,13 @@ export const getStandardProductsBundle = async () => {
       },
     },
   })
-    .fromFile('csv/Bundle.csv');
+    .fromFile('csv/Bundle.csv')
+    .subscribe(obj => {
+      // 'null' -> null
+      Object.keys(obj).forEach(function (key) {
+        if (this[key] === 'null') this[key] = null;
+      }, obj);
+    });
 
   return standardProductsBundle
 };
@@ -121,6 +127,73 @@ export const getStandardProductsConstraint = async () => {
     },
   })
     .fromFile('csv/Constraint.csv')
+    .subscribe(obj => {
+      // 'null' -> null
+      Object.keys(obj).forEach(function (key) {
+        if (this[key] === 'null') this[key] = null;
+      }, obj);
+    })
 
   return standardProductsConstraint
+}
+
+export const getStandardProductsEligibility = async () => {
+  const standardProductsEligibility = await csv({
+    noheader: false,
+    headers: [
+      'id',
+      'productId',
+      'name',
+      'eligibilityType',
+      'additionalValue',
+      'additionalInfo',
+      'additionalInfoUri',
+    ],
+    colParser: {
+      'id': 'omit',
+    },
+  })
+    .fromFile('csv/Eligibility.csv')
+    .subscribe(obj => {
+      // 'null' -> null
+      Object.keys(obj).forEach(function (key) {
+        if (this[key] === 'null') this[key] = null;
+      }, obj);
+    });
+
+  return standardProductsEligibility
+}
+
+export const getStandardProductsFee = async () => {
+  const standardProductsFee = await csv({
+    noheader: false,
+    headers: [
+      'id',
+      'productId',
+      'productName',
+      'name',
+      'feeType',
+      'amount',
+      'balanceRate',
+      'transactionRate',
+      'accruedRate',
+      'accrualFrequency',
+      'currency',
+      'additionalValue',
+      'additionalInfo',
+      'additionalInfoUri',
+    ],
+    colParser: {
+      'id': 'omit',
+    },
+  })
+    .fromFile('csv/Fees.csv')
+    .subscribe(obj => {
+      // 'null' -> null
+      Object.keys(obj).forEach(function (key) {
+        if (this[key] === 'null') this[key] = null;
+      }, obj);
+    });
+
+  return standardProductsFee
 }

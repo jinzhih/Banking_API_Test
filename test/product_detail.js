@@ -1,17 +1,17 @@
 import chai, { expect } from 'chai';
-import { getStandardProductsConstraint } from '../helper/csv_helper.js';
+import { getStandardProductsFee } from '../helper/csv_helper.js';
 
-describe.only('Get Product Detail', () => {
+describe('Get Product Detail', () => {
   let productData;
   let standardProductsDetail;
 
   before(async () => {
-    standardProductsDetail = await getStandardProductsConstraint();
+    standardProductsDetail = await getStandardProductsFee();
   })
 
-  describe('test', () => {
+  describe('Get StandardProductsFee', () => {
     it('ok', () => {
-      console.log(standardProductsDetail)
+      expect(standardProductsDetail).to.be.true;
     })
   })
 })
