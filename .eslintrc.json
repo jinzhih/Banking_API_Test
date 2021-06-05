@@ -12,10 +12,7 @@
   },
   "rules": {
     "strict": 0,
-    "linebreak-style": [
-      "error",
-      "windows"
-    ],
+    "linebreak-style": 0,
     "comma-dangle": [
       "error",
       "always-multiline"
