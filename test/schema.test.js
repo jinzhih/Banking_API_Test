@@ -22,7 +22,8 @@ describe('Schema Test', () => {
       expect(isError(res.error)).to.be.true;
     })
 
-    it('return error when amount, balanceRate, transactionRate, accruedRate are missing and feeType is not VARIABLE', () => {
+    it(`return error when amount, balanceRate, transactionRate, accruedRate are 
+      missing and feeType is not VARIABLE`, () => {
       const obj = {
         name: 'jim',
         feeType: 'type',
@@ -42,7 +43,8 @@ describe('Schema Test', () => {
       expect(isError(res.error)).to.be.false;
     })
 
-    it('return true when at least one of amount, balanceRate, transactionRate, accruedRate exist and feeType is not VARIABLE', () => {
+    it(`return true when at least one of amount, balanceRate, transactionRate, 
+      accruedRate exist and feeType is not VARIABLE`, () => {
       const obj = {
         name: 'jim',
         feeType: 'type',

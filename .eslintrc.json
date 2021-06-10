@@ -12,10 +12,7 @@
   },
   "rules": {
     "strict": 0,
-    "linebreak-style": [
-      "error",
-      "windows"
-    ],
+    "linebreak-style": 0,
     "comma-dangle": [
       "error",
       "always-multiline"
@@ -54,6 +51,8 @@
         "code": 120
       }
     ],
-    "quote-props": 0
+    "quote-props": 0,
+    "eol-last": 0,
+    "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }]
   }
 }
